@@ -39,7 +39,7 @@
     <!-- Styles CSS -->
     <style>
         body {
-            background-image: url('images/background.png'); /* Référence correcte à l'image */
+            background-image: url('images/background.png'); /* Chemin vers l'image */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -149,7 +149,6 @@
                         <option value="14">14</option>
                     </select>
                 </div>
-
                 <!-- Préférences alimentaires -->
                 <div class="mb-3">
                     <label for="preferences" class="form-label"><i class="fas fa-carrot icon"></i>Préférences alimentaires</label>
@@ -161,7 +160,6 @@
                         <option value="aucune">Aucune</option>
                     </select>
                 </div>
-
                 <!-- Durée du séjour -->
                 <div class="mb-3">
                     <label for="dureeSejour" class="form-label"><i class="fas fa-calendar-alt icon"></i>Durée du séjour (jours)</label>
@@ -194,101 +192,93 @@
 
         <!-- Section pour afficher la liste de courses organisée par étals -->
         <div id="courseList" class="course-list col-md-8"></div>
-Voici la suite du fichier **`index.html`** :
-
-```html
     </div>
-</body>
 
-<script>
-    document.getElementById('menuForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    <script>
+        document.getElementById('menuForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        const nbPersonnes = document.getElementById('nbPersonnes').value;
-        const preferences = document.getElementById('preferences').value;
-        const dureeSejour = document.getElementById('dureeSejour').value;
+            const nbPersonnes = document.getElementById('nbPersonnes').value;
+            const preferences = document.getElementById('preferences').value;
+            const dureeSejour = document.getElementById('dureeSejour').value;
 
-        try {
-            const response = await fetch('/.netlify/functions/generateMenus', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    nbPersonnes: nbPersonnes,
-                    preferences: preferences,
-                    dureeSejour: dureeSejour
-                }),
-            });
+            try {
+                const response = await fetch('/.netlify/functions/generateMenus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nbPersonnes: nbPersonnes,
+                        preferences: preferences,
+                        dureeSejour: dureeSejour
+                    }),
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok) {
-                const menus = parseMenus(data.menus);
-                displayMenus(menus.menus);
-                displayCourseList(menus.courses);
-            } else {
-                console.error('Erreur:', data.message);
+                if (response.ok) {
+                    const menus = parseMenus(data.menus);
+                    displayMenus(menus.menus);
+                    displayCourseList(menus.courses);
+                } else {
+                    console.error('Erreur:', data.message);
+                    alert('Une erreur est survenue. Veuillez réessayer.');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
                 alert('Une erreur est survenue. Veuillez réessayer.');
             }
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Une erreur est survenue. Veuillez réessayer.');
+        });
+
+        // Fonction pour parser le texte généré par OpenAI
+        function parseMenus(generatedText) {
+            const lines = generatedText.split('\\n').filter(line => line.trim() !== '');
+            let menus = [];
+            let courses = {};
+
+            let currentSection = null;
+            lines.forEach(line => {
+                if (line.startsWith('Menus:')) {
+                    currentSection = 'menus';
+                } else if (line.startsWith('Liste de Courses:')) {
+                    currentSection = 'courses';
+                } else if (currentSection === 'menus' && line.startsWith('- Jour')) {
+                    const [day, ...mealParts] = line.replace('- ', '').split(': ');
+                    const meal = mealParts.join(': ');
+                    menus.push({ day, meal });
+                } else if (currentSection === 'courses' && line.endsWith(':')) {
+                    currentCategory = line.replace(':', '');
+                    courses[currentCategory] = [];
+                } else if (currentSection === 'courses' && line.startsWith('- ')) {
+                    const item = line.replace('- ', '');
+                    courses[currentCategory].push(item);
+                }
+            });
+
+            return { menus, courses };
         }
-    });
 
-    // Fonction pour parser le texte généré par OpenAI
-    function parseMenus(generatedText) {
-        const lines = generatedText.split('\n').filter(line => line.trim() !== '');
-        let menus = [];
-        let courses = {};
+        // Fonction pour afficher les menus
+        function displayMenus(menus) {
+            const menuOutput = document.getElementById('menuOutput');
+            menuOutput.innerHTML = '<h2>Menus pour chaque jour</h2>';
+            menus.forEach(menu => {
+                menuOutput.innerHTML += `
+                    <h3>${menu.day}</h3>
+                    <p><strong>Plat :</strong> ${menu.meal}</p>
+                `;
+            });
+        }
 
-        let currentSection = null;
-
-        lines.forEach(line => {
-            if (line.startsWith('Menus:')) {
-                currentSection = 'menus';
-            } else if (line.startsWith('Liste de Courses:')) {
-                currentSection = 'courses';
-            } else if (currentSection === 'menus' && line.startsWith('- Jour')) {
-                const [day, ...mealParts] = line.replace('- ', '').split(': ');
-                const meal = mealParts.join(': ');
-                menus.push({ day, meal });
-            } else if (currentSection === 'courses' && line.endsWith(':')) {
-                currentCategory = line.replace(':', '');
-                courses[currentCategory] = [];
-            } else if (currentSection === 'courses' && line.startsWith('- ')) {
-                const item = line.replace('- ', '');
-                courses[currentCategory].push(item);
+        // Fonction pour afficher la liste de courses
+        function displayCourseList(courses) {
+            const courseList = document.getElementById('courseList');
+            courseList.innerHTML = '<h2>Liste de courses par étals</h2>';
+            for (const category in courses) {
+                courseList.innerHTML += `<h3>${category}</h3><ul>${courses[category].map(item => `<li>${item}</li>`).join('')}</ul>`;
             }
-        });
-
-        return { menus, courses };
-    }
-
-    // Fonction pour afficher les menus
-    function displayMenus(menus) {
-        const menuOutput = document.getElementById('menuOutput');
-        menuOutput.innerHTML = '<h2>Menus pour chaque jour</h2>';
-        menus.forEach(menu => {
-            menuOutput.innerHTML += `
-                <h3>${menu.day}</h3>
-                <p><strong>Plat :</strong> ${menu.meal}</p>
-            `;
-        });
-    }
-
-    // Fonction pour afficher la liste de courses
-    function displayCourseList(courses) {
-        const courseList = document.getElementById('courseList');
-        courseList.innerHTML = '<h2>Liste de courses par étals</h2>';
-        for (const category in courses) {
-            courseList.innerHTML += `<h3>${category}</h3><ul>${courses[category].map(item => `<li>${item}</li>`).join('')}</ul>`;
         }
-    }
-</script>
+    </script>
+</body>
 </html>
-
-</html>
-
-
