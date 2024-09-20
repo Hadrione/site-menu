@@ -3,79 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planifiez vos menus et vos courses en quelques clics</title>
-    
-    <!-- Importer Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>FoodiPlan - Planifiez vos menus et générez vos listes de courses en un clic</title>
 
-    <!-- Importer Font Awesome pour les icônes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Meta Description -->
+    <meta name="description" content="Avec FoodiPlan, planifiez vos repas, générez vos listes de courses et découvrez des recettes adaptées à vos goûts en un seul clic. Simplifiez vos courses et vos repas quotidiens.">
 
-    <!-- Importer Google Fonts -->
+    <!-- Meta Keywords -->
+    <meta name="keywords" content="générer listes de courses, courses faciles, planification de menus, que cuisiner, menus en un clic, repas rapides, recettes faciles, courses en ligne, planification repas">
+
+    <!-- Author -->
+    <meta name="author" content="FoodiPlan Team">
+
+    <!-- Open Graph Meta Tags (pour les partages sur les réseaux sociaux) -->
+    <meta property="og:title" content="FoodiPlan - Planifiez vos menus et vos courses en un clic !">
+    <meta property="og:description" content="Générez vos listes de courses et planifiez vos repas en quelques clics avec FoodiPlan. Simplifiez votre quotidien.">
+    <meta property="og:image" content="https://www.foodiplan.com/images/preview.png">
+    <meta property="og:url" content="https://www.foodiplan.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FoodiPlan - Simplifiez vos repas et courses">
+    <meta name="twitter:description" content="Découvrez comment FoodiPlan peut transformer la manière dont vous planifiez vos repas et faites vos courses. Générez des listes de courses adaptées à vos besoins.">
+    <meta name="twitter:image" content="https://www.foodiplan.com/images/preview.png">
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-    <!-- Styles CSS personnalisés -->
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Styles CSS -->
     <style>
         body {
-            background-image: url('images/background.png'); /* Image hébergée dans le dossier images */
+            background-image: url('images/background.png');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
-            font-family: 'Poppins', sans-serif; /* Police personnalisée */
+            font-family: 'Poppins', sans-serif;
             color: #fff;
         }
         .form-container {
-            background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent pour le formulaire */
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 1.5s ease; /* Animation de l'apparition */
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-        .form-label {
-            font-weight: 600;
-        }
-        .form-control, .form-select {
-            font-size: 1rem;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            transition: background-color 0.3s ease; /* Transition douce */
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .icon {
-            margin-right: 10px;
-        }
-        label {
-            font-weight: bold;
         }
     </style>
+
+    <!-- Structured Data (Schéma JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Website",
+      "url": "https://www.foodiplan.com",
+      "name": "FoodiPlan",
+      "description": "Planifiez vos repas, générez vos listes de courses et simplifiez vos courses avec FoodiPlan.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "FoodiPlan"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.foodiplan.com/recherche?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 </head>
+
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="col-md-6 form-container">
-            <h1 class="text-center"><i class="fas fa-utensils icon"></i>Planifiez vos menus et vos courses en quelques clics !</h1>
+            <h1 class="text-center"><i class="fas fa-utensils"></i> Planifiez vos menus et vos courses en quelques clics !</h1>
             <form id="menuForm">
-                <!-- Nombre de personnes (dropdown) -->
+                <!-- Formulaire -->
                 <div class="mb-3">
-                    <label for="nbPersonnes" class="form-label"><i class="fas fa-users icon"></i>Nombre de personnes</label>
+                    <label for="nbPersonnes" class="form-label">Nombre de personnes</label>
                     <select class="form-select" id="nbPersonnes" required>
                         <option value="" disabled selected>Choisissez...</option>
                         <option value="1">1</option>
@@ -97,7 +99,7 @@
 
                 <!-- Préférences alimentaires -->
                 <div class="mb-3">
-                    <label for="preferences" class="form-label"><i class="fas fa-carrot icon"></i>Préférences alimentaires</label>
+                    <label for="preferences" class="form-label">Préférences alimentaires</label>
                     <select class="form-select" id="preferences" required>
                         <option value="" disabled selected>Choisissez...</option>
                         <option value="vegetarien">Végétarien</option>
@@ -107,9 +109,9 @@
                     </select>
                 </div>
 
-                <!-- Durée du séjour (dropdown) -->
+                <!-- Durée du séjour -->
                 <div class="mb-3">
-                    <label for="dureeSejour" class="form-label"><i class="fas fa-calendar-alt icon"></i>Durée du séjour (jours)</label>
+                    <label for="dureeSejour" class="form-label">Durée du séjour (jours)</label>
                     <select class="form-select" id="dureeSejour" required>
                         <option value="" disabled selected>Choisissez...</option>
                         <option value="1">1 jour</option>
@@ -130,7 +132,7 @@
                 </div>
 
                 <!-- Bouton de soumission -->
-                <button type="submit" class="btn btn-primary w-100"><i class="fas fa-paper-plane icon"></i>Générer menus et courses</button>
+                <button type="submit" class="btn btn-primary w-100">Générer menus et courses</button>
             </form>
         </div>
     </div>
@@ -164,4 +166,5 @@
     </script>
 </body>
 </html>
+
 
