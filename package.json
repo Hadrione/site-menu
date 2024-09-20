@@ -1,12 +1,17 @@
 {
   "name": "foodiplan",
   "version": "1.0.0",
-  "description": "Planifiez vos menus et générez vos listes de courses",
+  "description": "FoodiPlan - Planifiez vos menus et vos courses en quelques clics",
   "main": "index.js",
   "scripts": {
+    "build": "netlify build",
+    "dev": "netlify dev",
     "start": "netlify dev"
   },
   "dependencies": {
     "axios": "^0.21.1"
-  }
+  },
+  "devDependencies": {},
+  "author": "FoodiPlan Team",
+  "license": "MIT"
 }
