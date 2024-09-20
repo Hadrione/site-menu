@@ -1,8 +1,6 @@
 [build]
-  functions = "functions"
-  publish = "public"
+  publish = "site-menu" # Le dossier où se trouve votre site HTML
+  functions = "functions" # Dossier où sont stockées vos fonctions Netlify (comme generateMenus.js)
 
-[[redirects]]
-  from = "/.netlify/functions/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+[functions]
+  node_bundler = "esbuild" # Option pour spécifier comment les fonctions sont gérées par Netlify
