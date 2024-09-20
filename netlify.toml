@@ -1,5 +1,5 @@
 [build]
-  publish = "site-menu" # Le dossier où se trouve votre site HTML
+  publish = "." # Le dossier où se trouve votre site HTML
   functions = "functions" # Dossier où sont stockées vos fonctions Netlify (comme generateMenus.js)
 
 [functions]
