@@ -99,27 +99,10 @@
         .course-list {
             background-color: rgba(233, 236, 239, 0.9);
         }
+        #menuOutput, #courseList {
+            display: none; /* Cacher les sections tant qu'elles ne sont pas remplies */
+        }
     </style>
-
-    <!-- Structured Data (Schéma JSON-LD) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Website",
-      "url": "https://www.foodiplan.com",
-      "name": "FoodiPlan",
-      "description": "Planifiez vos repas, générez vos listes de courses et simplifiez vos courses avec FoodiPlan.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "FoodiPlan"
-      },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.foodiplan.com/recherche?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
 </head>
 <body>
     <div class="container d-flex flex-column align-items-center">
@@ -149,6 +132,7 @@
                         <option value="14">14</option>
                     </select>
                 </div>
+
                 <!-- Préférences alimentaires -->
                 <div class="mb-3">
                     <label for="preferences" class="form-label"><i class="fas fa-carrot icon"></i>Préférences alimentaires</label>
@@ -160,6 +144,7 @@
                         <option value="aucune">Aucune</option>
                     </select>
                 </div>
+
                 <!-- Durée du séjour -->
                 <div class="mb-3">
                     <label for="dureeSejour" class="form-label"><i class="fas fa-calendar-alt icon"></i>Durée du séjour (jours)</label>
@@ -193,7 +178,6 @@
         <!-- Section pour afficher la liste de courses organisée par étals -->
         <div id="courseList" class="course-list col-md-8"></div>
     </div>
-
     <script>
         document.getElementById('menuForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -231,13 +215,14 @@
             }
         });
 
-        // Fonction pour parser le texte généré par OpenAI
+        // Fonction pour parser le texte généré
         function parseMenus(generatedText) {
-            const lines = generatedText.split('\\n').filter(line => line.trim() !== '');
+            const lines = generatedText.split('\n').filter(line => line.trim() !== '');
             let menus = [];
             let courses = {};
 
             let currentSection = null;
+
             lines.forEach(line => {
                 if (line.startsWith('Menus:')) {
                     currentSection = 'menus';
@@ -262,6 +247,7 @@
         // Fonction pour afficher les menus
         function displayMenus(menus) {
             const menuOutput = document.getElementById('menuOutput');
+            menuOutput.style.display = 'block';  // Affiche la section quand les données sont prêtes
             menuOutput.innerHTML = '<h2>Menus pour chaque jour</h2>';
             menus.forEach(menu => {
                 menuOutput.innerHTML += `
@@ -274,6 +260,7 @@
         // Fonction pour afficher la liste de courses
         function displayCourseList(courses) {
             const courseList = document.getElementById('courseList');
+            courseList.style.display = 'block';  // Affiche la section quand les données sont prêtes
             courseList.innerHTML = '<h2>Liste de courses par étals</h2>';
             for (const category in courses) {
                 courseList.innerHTML += `<h3>${category}</h3><ul>${courses[category].map(item => `<li>${item}</li>`).join('')}</ul>`;
