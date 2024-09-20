@@ -53,6 +53,7 @@ exports.handler = async (event, context) => {
             body: JSON.stringify({ menus: generatedText }),
         };
     } catch (error) {
+        console.error('Erreur lors de l\'appel à l\'API OpenAI:', error);  // Log de l'erreur pour le débogage
         return {
             statusCode: 500,
             body: JSON.stringify({ message: 'Internal Server Error', error: error.message }),
